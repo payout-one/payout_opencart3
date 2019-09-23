@@ -13,12 +13,12 @@ $_['tab_order_statuses']        = 'Stavy objednávok';
 $_['tab_about']                 = 'O module';
 
 // General
-$_['entry_client_id']           = 'Číslo účtu';
-$_['help_client_id']            = 'ID účtu obchodníka (client_id) priradené systémom Payout';
-$_['error_client_id']           = 'Číslo účtu je povinný údaj!';
-$_['entry_client_secret']       = 'Tajný kľúč';
-$_['help_client_secret']        = 'Tajný kľúč (client_secret) priradený systémom Payout';
-$_['error_client_secret']       = 'Kľúč je povinný údaj!';
+$_['entry_client_id']           = 'API Kľúč';
+$_['help_client_id']            = 'API kľúč vygenerovaný vo vašom Payout Banking v časti Vývojári > API Kľúče > Generovať nový kľúč';
+$_['error_client_id']           = 'API Kľúč je povinný údaj!';
+$_['entry_client_secret']       = 'API Tajomstvo';
+$_['help_client_secret']        = 'Tajomstvo vygenerované spolu s vašim API kľúčom vo vašom Payout Banking v časti Vývojári > API Kľúče > Generovať nový kľúč';
+$_['error_client_secret']       = 'API Tajomstvo je povinný údaj!';
 $_['entry_test']                = 'Testovacia prevádzka:';
 $_['help_test']                 = '(Sandbox Mode) Používať testovací server brány pre spracovanie transakcií';
 $_['entry_debug']               = 'Režim ladenia:';

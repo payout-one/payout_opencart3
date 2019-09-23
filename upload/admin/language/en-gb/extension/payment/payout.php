@@ -13,12 +13,12 @@ $_['tab_order_statuses']        = 'Order Statuses';
 $_['tab_about']                 = 'About';
 
 // General
-$_['entry_client_id']           = 'Account ID';
-$_['help_client_id']            = 'The ID of merchant account assigned by Payout';
-$_['error_client_id']           = 'Account ID is required!';
-$_['entry_client_secret']       = 'Secret Key';
-$_['help_client_secret']        = 'The secret key assigned by Payout';
-$_['error_client_secret']                 = 'Key is required!';
+$_['entry_client_id']           = 'API Key ID';
+$_['help_client_id']            = 'The API Key ID generated in your Payout Banking under Developers > API Keys > Generate a new key';
+$_['error_client_id']           = 'API Key ID is required!';
+$_['entry_client_secret']       = 'API Secret';
+$_['help_client_secret']        = 'The Secret generated with your API Key in Payout Banking under Developers > API Keys > Generate a new key';
+$_['error_client_secret']       = 'API Secret is required!';
 $_['entry_test']                = 'Sandbox Mode:';
 $_['help_test']                 = 'Use the testing gateway server to process transactions';
 $_['entry_debug']               = 'Debug Mode:';

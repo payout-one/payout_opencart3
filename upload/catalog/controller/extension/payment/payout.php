@@ -39,63 +39,15 @@ use Payout\Client;
  * @link       https://github.com/payout-one/payout_opencart3
  */
 class ControllerExtensionPaymentPayout extends Controller {
-    protected $payout_config;
+    protected $payout, $payout_config, $payout_error;
 
-    public function index() {
-        $this->load->language('extension/payment/payout');
+    public function __construct($registry)
+    {
+        parent::__construct($registry);
 
-        $data['text_license'] = sprintf($this->language->get('text_license'), date("Y"));
-        $data['text_testmode'] = $this->language->get('text_testmode');
-        $data['button_confirm'] = $this->language->get('button_confirm');
-
-        $data['testmode'] = $this->config->get('payment_payout_sandbox');
-
-        $this->loadConfiguration();
-
-        $this->load->model('checkout/order');
-
-        $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-
-        if ($order_info) {
-            try {
-                $payout = new Client();
-                $data['payout_php_ver'] = $payout->getLibraryVersion();
-                $data['payout_oc_ver'] = $this->payout_config['version'];
-            } catch (Exception $e) {
-                $data['payout_error'] = $e->getMessage();
-            }
-
-            $data['checkout_url'] = $this->config->get('config_url');
-            $data['checkout_route'] = $this->payout_config['routes']['checkout'];
-            return $this->load->view('extension/payment/payout', $data);
-        }
-    }
-
-    private function loadConfiguration() {
         $this->payout_config = unserialize($this->config->get('payment_payout_config'));
-    }
 
-    public function checkout() {
-        $this->loadConfiguration();
-
-        $this->load->model('checkout/order');
-
-        $order_id = $this->session->data['order_id'];
-        $order_info = $this->model_checkout_order->getOrder($order_id);
-
-        if ($order_info && $order_info['order_status_id'] == 0)  {
-            $checkout_data = array(
-                "amount" => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false),
-                "currency" => $order_info['currency_code'],
-                "customer" => [
-                    "first_name" => $order_info['firstname'],
-                    "last_name" =>  $order_info['lastname'],
-                    "email" =>  $order_info['email']
-                ],
-                "external_id" => $order_id,
-                "redirect_url" => $this->url->link('checkout/success')
-            );
-
+        try {
             // Config Payout API Client PHP Library
             $config = array(
                 'client_id' => $this->config->get('payment_payout_client_id'),
@@ -103,24 +55,80 @@ class ControllerExtensionPaymentPayout extends Controller {
                 'sandbox' => true
             );
 
-            try {
-                $payout = new Client($config);
+            // Initialize Payout API Client PHP Library
+            $this->payout = new Client($config);
+        } catch (Exception $e) {
+            $this->payout_error = $e->getMessage();
+        }
+    }
 
-                $response = $payout->createCheckout($checkout_data);
+    public function index()
+    {
+        $this->load->language('extension/payment/payout');
+
+        $data['text_license'] = sprintf($this->language->get('text_license'), date('Y'));
+        $data['text_testmode'] = $this->language->get('text_testmode');
+        $data['button_confirm'] = $this->language->get('button_confirm');
+
+        $data['testmode'] = $this->config->get('payment_payout_sandbox');
+
+        $this->load->model('checkout/order');
+
+        $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
+
+        if ($order_info && $this->payout) {
+            try {
+                $data['payout_php_ver'] = $this->payout->getLibraryVersion();
+                $data['payout_oc_ver'] = $this->payout_config['version'];
+            } catch (Exception $e) {
+                $data['payout_error'] = $e->getMessage();
+            }
+
+            $data['checkout_url'] = $this->config->get('config_url');
+            $data['checkout_route'] = $this->payout_config['routes']['checkout'];
+        } else {
+            $data['payout_error'] = $this->payout_error;
+        }
+
+        return $this->load->view('extension/payment/payout', $data);
+    }
+
+    public function checkout()
+    {
+        $this->load->model('checkout/order');
+
+        $order_id = $this->session->data['order_id'];
+        $order_info = $this->model_checkout_order->getOrder($order_id);
+
+        if ($order_info && $order_info['order_status_id'] == 0)  {
+            $checkout_data = array(
+                'amount' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false),
+                'currency' => $order_info['currency_code'],
+                'customer' => [
+                    'first_name' => $order_info['firstname'],
+                    'last_name' =>  $order_info['lastname'],
+                    'email' =>  $order_info['email']
+                ],
+                'external_id' => $order_id,
+                'redirect_url' => $this->url->link('checkout/success')
+            );
+
+            try {
+                $response = $this->payout->createCheckout($checkout_data);
 
                 if (isset($response->checkout_url) && isset($response->external_id) && $response->external_id == $order_id) {
                     if ($this->config->get('payment_payout_debug')) {
                         $this->log->write('Payout :: CHECKOUT: Order ID = ' . $order_id . '; Checkout status: ' . $response->status);
                     }
 
-                    if ($response->status == "expired") {
+                    if ($response->status == 'expired') {
                         $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_payout_expired_status_id'));
 
-                        header("Location: " . $this->url->link('checkout/checkout'));
+                        header('Location: ' . $this->url->link('checkout/checkout'));
                     } else {
                         $this->model_checkout_order->addOrderHistory($order_id, $this->config->get('payment_payout_processing_status_id'));
 
-                        header("Location: " . $response->checkout_url);
+                        header('Location: ' . $response->checkout_url);
                     }
                 }
             } catch (Exception $e) {
@@ -132,29 +140,34 @@ class ControllerExtensionPaymentPayout extends Controller {
 
                 $this->session->data['error'] = sprintf($this->language->get('error_payment'), $result);
 
-                header("Location: " . $this->url->link('checkout/checkout'));
+                header('Location: ' . $this->url->link('checkout/checkout'));
             }
 
             die();
         }
     }
 
-    public function notification() {
-        // TODO handle checkout notification - verify signature
+    public function notification()
+    {
         $notification = json_decode(file_get_contents('php://input'));
 
         if (isset($notification->external_id) && isset($notification->data->status)) {
+            if (!$this->payout->verifySignature(array($notification->external_id, $notification->type, $notification->nonce), $notification->signature)) {
+                $this->log->write('Payout :: WARNING: Invalid signature in API notification.');
+                die();
+            }
+
             $this->load->model('checkout/order');
 
             $order_info = $this->model_checkout_order->getOrder($notification->external_id);
 
-            if ($notification->data->status == "succeeded" || $notification->data->status == "successful") {
+            if ($notification->data->status == 'succeeded' || $notification->data->status == 'successful') {
                 $order_status_id = $this->config->get('payment_payout_success_status_id');
-            } elseif ($notification->data->status == "expired") {
+            } elseif ($notification->data->status == 'expired') {
                 $order_status_id = $this->config->get('payment_payout_expired_status_id');
-            } elseif ($notification->data->status == "in_transit" || $notification->data->status == "processing") {
+            } elseif ($notification->data->status == 'in_transit' || $notification->data->status == 'processing') {
                 $order_status_id = $this->config->get('payment_payout_processing_status_id');
-            } elseif ($notification->data->status == "failed") {
+            } elseif ($notification->data->status == 'failed') {
                 $order_status_id = $this->config->get('payment_payout_failed_status_id');
             } else {
                 $order_status_id = $this->config->get('config_order_status_id');

@@ -28,14 +28,14 @@
  *
  * The Payout payment module for OpenCart 3
  *
- * @version    0.3.0
+ * @version    0.9.0
  * @copyright  2019 Payout, s.r.o.
  * @author     Neotrendy s. r. o.
  * @link       https://github.com/payout-one/payout_opencart3
  */
 class ControllerExtensionPaymentPayout extends Controller {
     protected $payout_config = array(
-        'version' => '0.3.0',
+        'version' => '0.9.0',
         'compatibility' => array('3.0.3.2'),
         'routes' => array(
             'checkout' => 'extension/payment/payout/checkout',
@@ -258,11 +258,11 @@ class ControllerExtensionPaymentPayout extends Controller {
             $data['info_version'] .= $this->language->get('info_version');
         }
         $data['text_compatibility'] = $this->language->get('text_compatibility');
-        $data['info_compatibility'] = sprintf($this->language->get('info_compatibility'), implode(",", $this->payout_config['compatibility']));
+        $data['info_compatibility'] = sprintf($this->language->get('info_compatibility'), implode(',', $this->payout_config['compatibility']));
         $data['text_documentation'] = $this->language->get('text_documentation');
         $data['info_documentation'] = $this->language->get('info_documentation');
         $data['text_license'] = $this->language->get('text_license');
-        $data['info_license'] = sprintf($this->language->get('info_license'), date("Y"));
+        $data['info_license'] = sprintf($this->language->get('info_license'), date('Y'));
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');

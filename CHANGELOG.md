@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.0 (first beta) - 2019‑09-25
+* Signature verification ([a50a669](https://github.com/payout-one/payout_opencart3/commit/a50a669d43dccb6137247c736a90f884c51e18c9))
+
 ## 0.3.0 - 2019‑09-25
 * Handle Create checkout and Webhook notification ([70c14c4](https://github.com/payout-one/payout_opencart3/commit/70c14c43b8fe19aa4945c2ca171e041931a4bde5))
 

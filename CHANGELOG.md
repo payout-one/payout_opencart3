@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.0 - 2019‑09-25
+* Handle Create checkout and Webhook notification ([70c14c4](https://github.com/payout-one/payout_opencart3/commit/70c14c43b8fe19aa4945c2ca171e041931a4bde5))
+
 ## 0.2.0 - 2019‑09-24
 * OpenCart payment module admin section - create checkout API method ([d069e80](https://github.com/payout-one/payout_opencart3/commit/d069e806d2667145bbbfa283165faa9b7881055b))
 * Admin wording ([adda3b5](https://github.com/payout-one/payout_opencart3/commit/adda3b5086920583746b2d43a828f5f53d450f30))

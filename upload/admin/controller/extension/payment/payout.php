@@ -28,17 +28,17 @@
  *
  * The Payout payment module for OpenCart 3
  *
- * @version    0.2.0
+ * @version    0.3.0
  * @copyright  2019 Payout, s.r.o.
  * @author     Neotrendy s. r. o.
  * @link       https://github.com/payout-one/payout_opencart3
  */
 class ControllerExtensionPaymentPayout extends Controller {
     protected $payout_config = array(
-        'version' => '0.1.0',
+        'version' => '0.3.0',
         'compatibility' => array('3.0.3.2'),
         'routes' => array(
-            'redirect' => 'extension/payment/payout/redirect',
+            'checkout' => 'extension/payment/payout/checkout',
             'notification' => 'extension/payment/payout/notification'
         )
     );
@@ -136,10 +136,10 @@ class ControllerExtensionPaymentPayout extends Controller {
         $data['entry_test'] = $this->language->get('entry_test');
         $data['help_test'] = $this->language->get('help_test');
 
-        if (isset($this->request->post['payment_payout_test'])) {
-            $data['payment_payout_test'] = $this->request->post['payment_payout_test'];
+        if (isset($this->request->post['payment_payout_sandbox'])) {
+            $data['payment_payout_sandbox'] = $this->request->post['payment_payout_sandbox'];
         } else {
-            $data['payment_payout_test'] = $this->config->get('payment_payout_test');
+            $data['payment_payout_sandbox'] = $this->config->get('payment_payout_sandbox');
         }
 
         $data['entry_debug'] = $this->language->get('entry_debug');
@@ -206,42 +206,6 @@ class ControllerExtensionPaymentPayout extends Controller {
 
         $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
-        $data['entry_success_status'] = $this->language->get('entry_success_status');
-        $data['help_success_status'] = $this->language->get('help_success_status');
-
-        if (isset($this->request->post['payment_payout_success_status_id'])) {
-            $data['payment_payout_success_status_id'] = $this->request->post['payment_payout_success_status_id'];
-        } else {
-            $data['payment_payout_success_status_id'] = $this->config->get('payment_payout_success_status_id');
-        }
-
-        $data['entry_pending_status'] = $this->language->get('entry_pending_status');
-        $data['help_pending_status'] = $this->language->get('help_pending_status');
-
-        if (isset($this->request->post['payment_payout_pending_status_id'])) {
-            $data['payment_payout_pending_status_id'] = $this->request->post['payment_payout_pending_status_id'];
-        } else {
-            $data['payment_payout_pending_status_id'] = $this->config->get('payment_payout_pending_status_id');
-        }
-
-        $data['entry_announced_status'] = $this->language->get('entry_announced_status');
-        $data['help_announced_status'] = $this->language->get('help_announced_status');
-
-        if (isset($this->request->post['payment_payout_announced_status_id'])) {
-            $data['payment_payout_announced_status_id'] = $this->request->post['payment_payout_announced_status_id'];
-        } else {
-            $data['payment_payout_announced_status_id'] = $this->config->get('payment_payout_announced_status_id');
-        }
-
-        $data['entry_authorized_status'] = $this->language->get('entry_authorized_status');
-        $data['help_authorized_status'] = $this->language->get('help_authorized_status');
-
-        if (isset($this->request->post['payment_payout_authorized_status_id'])) {
-            $data['payment_payout_authorized_status_id'] = $this->request->post['payment_payout_authorized_status_id'];
-        } else {
-            $data['payment_payout_authorized_status_id'] = $this->config->get('payment_payout_authorized_status_id');
-        }
-
         $data['entry_processing_status'] = $this->language->get('entry_processing_status');
         $data['help_processing_status'] = $this->language->get('help_processing_status');
 
@@ -251,6 +215,24 @@ class ControllerExtensionPaymentPayout extends Controller {
             $data['payment_payout_processing_status_id'] = $this->config->get('payment_payout_processing_status_id');
         }
 
+        $data['entry_success_status'] = $this->language->get('entry_success_status');
+        $data['help_success_status'] = $this->language->get('help_success_status');
+
+        if (isset($this->request->post['payment_payout_success_status_id'])) {
+            $data['payment_payout_success_status_id'] = $this->request->post['payment_payout_success_status_id'];
+        } else {
+            $data['payment_payout_success_status_id'] = $this->config->get('payment_payout_success_status_id');
+        }
+
+        $data['entry_expired_status'] = $this->language->get('entry_expired_status');
+        $data['help_expired_status'] = $this->language->get('help_expired_status');
+
+        if (isset($this->request->post['payment_payout_expired_status_id'])) {
+            $data['payment_payout_expired_status_id'] = $this->request->post['payment_payout_expired_status_id'];
+        } else {
+            $data['payment_payout_expired_status_id'] = $this->config->get('payment_payout_expired_status_id');
+        }
+
         $data['entry_failed_status'] = $this->language->get('entry_failed_status');
         $data['help_failed_status'] = $this->language->get('help_failed_status');
 
@@ -258,15 +240,6 @@ class ControllerExtensionPaymentPayout extends Controller {
             $data['payment_payout_failed_status_id'] = $this->request->post['payment_payout_failed_status_id'];
         } else {
             $data['payment_payout_failed_status_id'] = $this->config->get('payment_payout_failed_status_id');
-        }
-
-        $data['entry_amount_mismatch_status'] = $this->language->get('entry_amount_mismatch_status');
-        $data['help_amount_mismatch_status'] = $this->language->get('help_amount_mismatch_status');
-
-        if (isset($this->request->post['payment_payout_amount_mismatch_status_id'])) {
-            $data['payment_payout_amount_mismatch_status_id'] = $this->request->post['payment_payout_amount_mismatch_status_id'];
-        } else {
-            $data['payment_payout_amount_mismatch_status_id'] = $this->config->get('payment_payout_amount_mismatch_status_id');
         }
 
         $data['entry_notify'] = $this->language->get('entry_notify');

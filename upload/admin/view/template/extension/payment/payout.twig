@@ -54,8 +54,8 @@
 							<div class="form-group">
 								<label class="col-sm-2 control-label" for="input-live-demo"><span data-toggle="tooltip" title="{{ help_test }}">{{ entry_test }}</span></label>
 								<div class="col-sm-10">
-									<select name="payment_payout_test" id="input-live-demo" class="form-control">
-										{% if payment_payout_test %}
+									<select name="payment_payout_sandbox" id="input-live-demo" class="form-control">
+										{% if payment_payout_sandbox %}
 										<option value="1" selected="selected">{{ text_yes }}</option>
 										<option value="0">{{ text_no }}</option>
 										{% else %}
@@ -160,20 +160,6 @@
 									<select name="payment_payout_expired_status_id" id="input-expired-status" class="form-control">
 										{% for order_status in order_statuses %}
 										{% if order_status.order_status_id == payment_payout_expired_status_id %}
-										<option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
-										{% else %}
-										<option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
-										{% endif %}
-										{% endfor %}
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label" for="input-cancelled-status"><span data-toggle="tooltip" title="{{ help_cancelled_status }}">{{ entry_cancelled_status }}</span></label>
-								<div class="col-sm-10">
-									<select name="payment_payout_cancelled_status_id" id="input-cancelled-status" class="form-control">
-										{% for order_status in order_statuses %}
-										{% if order_status.order_status_id == payment_payout_cancelled_status_id %}
 										<option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
 										{% else %}
 										<option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>

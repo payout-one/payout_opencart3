@@ -5,4 +5,4 @@ $_['text_license']      = "Payout\nThe MIT License\nCopyright (c) 2019-%d Payout
 $_['text_testmode']     = 'Warning: The payment gateway is in "Sandbox Mode". Your account will not be charged.';
 
 // Error
-$_['error_payment']     = 'Warning: The payment has not been processed! <small>(Payout error code %s)</small>';
+$_['error_payment']     = 'Warning: The payment has not been processed! <small>(%s)</small>';

@@ -8,9 +8,14 @@
 
 {% if testmode %}
 	<div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ text_testmode }}</div>
-	<div class="alert alert-info">payout_php v{{ payout_php_ver }} | payout_opencart3 v{{ payout_oc_ver }}</div>
+	<div class="alert alert-info">payout_php version {{ payout_php_ver }}<br>payout_opencart3 version {{ payout_oc_ver }}</div>
 {% endif %}
 
-<div class="pull-right">
-	<input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
-</div>
+<form action="{{ checkout_url }}index.php" method="get" id="form-payout">
+	<div class="buttons">
+		<input type="hidden" name="route" value="{{ checkout_route }}" />
+		<div class="pull-right">
+			<input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
+		</div>
+	</div>
+</form>

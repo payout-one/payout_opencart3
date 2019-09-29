@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.9.1 (beta) - 2019‑09-30
+* OpenCart payment module ([1ae1d55](https://github.com/payout-one/payout_opencart3/commit/1ae1d55885205e3380bd56b1696e90cb61091fb7))
+
 ## 0.9.0 (first beta) - 2019‑09-25
 * Signature verification ([a50a669](https://github.com/payout-one/payout_opencart3/commit/a50a669d43dccb6137247c736a90f884c51e18c9))
 

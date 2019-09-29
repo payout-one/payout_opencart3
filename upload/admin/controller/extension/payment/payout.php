@@ -28,14 +28,14 @@
  *
  * The Payout payment module for OpenCart 3
  *
- * @version    0.9.0
+ * @version    0.9.1
  * @copyright  2019 Payout, s.r.o.
  * @author     Neotrendy s. r. o.
  * @link       https://github.com/payout-one/payout_opencart3
  */
 class ControllerExtensionPaymentPayout extends Controller {
     protected $payout_config = array(
-        'version' => '0.9.0',
+        'version' => '0.9.1',
         'compatibility' => array('3.0.3.2'),
         'routes' => array(
             'checkout' => 'extension/payment/payout/checkout',
@@ -98,6 +98,16 @@ class ControllerExtensionPaymentPayout extends Controller {
         $data['tab_general'] = $this->language->get('tab_general');
         $data['tab_order_statuses'] = $this->language->get('tab_order_statuses');
         $data['tab_about'] = $this->language->get('tab_about');
+
+        // Notification URL
+        if ($this->ssl) {
+            $url = HTTPS_CATALOG . 'index.php?route=';
+        } else {
+            $url = HTTP_CATALOG . 'index.php?route=';
+        }
+
+        $data['text_notification_url'] = $this->language->get('text_notification_url');
+        $data['notification_url'] = $url . $this->payout_config['routes']['notification'];
 
         // General
         $data['entry_client_id'] = $this->language->get('entry_client_id');
@@ -190,16 +200,6 @@ class ControllerExtensionPaymentPayout extends Controller {
         } else {
             $data['payment_payout_sort_order'] = $this->config->get('payment_payout_sort_order');
         }
-
-        // Notification URL
-        if ($this->ssl) {
-            $url = HTTPS_CATALOG . 'index.php?route=';
-        } else {
-            $url = HTTP_CATALOG . 'index.php?route=';
-        }
-
-        $data['text_notification_url'] = $this->language->get('text_notification_url');
-        $data['notification_url'] = $url . $this->payout_config['routes']['notification'];
 
         // Order Statuses
         $this->load->model('localisation/order_status');

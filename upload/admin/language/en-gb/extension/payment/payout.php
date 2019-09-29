@@ -13,6 +13,7 @@ $_['tab_order_statuses']        = 'Order Statuses';
 $_['tab_about']                 = 'About';
 
 // General
+$_['text_notification_url']     = 'Notification URL:';
 $_['entry_client_id']           = 'API Key ID';
 $_['help_client_id']            = 'The API Key ID generated in your Payout Banking under Developers > API Keys > Generate a new key';
 $_['error_client_id']           = 'API Key ID is required!';
@@ -28,7 +29,6 @@ $_['help_total']                = 'The checkout total the order must reach befor
 $_['entry_geo_zone']            = 'Geo Zone:';
 $_['entry_status']              = 'Status:';
 $_['entry_sort_order']          = 'Sort Order';
-$_['text_notification_url']     = 'Notification URL:';
 
 // Order Statuses
 $_['entry_processing_status']   = 'Processing Status:';

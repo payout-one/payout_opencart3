@@ -13,6 +13,7 @@ $_['tab_order_statuses']        = 'Stavy objednávek';
 $_['tab_about']                 = 'O modulu';
 
 // General
+$_['text_notification_url']     = 'Notification URL:';
 $_['entry_client_id']           = 'API klíč';
 $_['help_client_id']            = 'API klíč vygenerovaný ve vašem Payout Banking v části Vývojáři > API Klíče > Generovat nový klíč';
 $_['error_client_id']           = 'API klíč je povinný údaj!';
@@ -28,7 +29,6 @@ $_['help_total']                = 'Modul Payout se stane aktivním, když objedn
 $_['entry_geo_zone']            = 'Geo zóna:';
 $_['entry_status']              = 'Stav:';
 $_['entry_sort_order']          = 'Řazení';
-$_['text_notification_url']     = 'Notification URL:';
 
 // Order Statuses
 $_['entry_processing_status']   = 'Probíhající stav:';

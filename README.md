@@ -12,6 +12,7 @@ The extension provides access to the [Payout](https://payout.one/) IE API and al
 ## Requirements
 
 * PHP 5.5 or later
+* cUrl extension enabled
 * Payout API Client PHP Library [GitHub](https://github.com/payout-one/payout_php)
 * Payout account
 
@@ -22,16 +23,16 @@ The [Payout API Client PHP Library]((https://github.com/payout-one/payout_php)) 
 
 ### A) Installation using OpenCart OCMOD modification system
 
-1. Download ``.ocmod.zip`` installation file from [GitHub Releases](https://github.com/payout-one/payout_opencart3/releases).
+1. Download `.ocmod.zip` installation file from [GitHub Releases](https://github.com/payout-one/payout_opencart3/releases).
 2. Login to Your Store admin section and navigate to __Extensions__ > __Installer__.
-3. Upload the ``.ocmod.zip`` file.
+3. Upload the `.ocmod.zip` file.
 4. If you see green notification, the files has been successfully uploaded.
 
 ### B) Manual installation using FTP file upload
 
-1. Download ``.ocmod.zip`` installation file from [GitHub Releases](https://github.com/payout-one/payout_opencart2/releases).
+1. Download `.ocmod.zip` installation file from [GitHub Releases](https://github.com/payout-one/payout_opencart2/releases).
 2. Unzip downloaded file.
-3. Use any FTP client to upload files form ``upload`` directory to Your Store ``root`` on your web-server. 
+3. Use any FTP client to upload files form `upload` directory to Your Store `root` on your web-server. 
 
 ### Configuration
 
@@ -49,7 +50,7 @@ New order will be automatically changed to the status according to payment resul
 
 ## Version
 
-Stable version: 0.9.1 (beta)
+Stable version: 0.9.2 (beta)
 
 See the [CHANGELOG.md](CHANGELOG.md) file for list off all changes.
 

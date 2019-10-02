@@ -52,7 +52,7 @@ class ControllerExtensionPaymentPayout extends Controller {
             $config = array(
                 'client_id' => $this->config->get('payment_payout_client_id'),
                 'client_secret' => $this->config->get('payment_payout_client_secret'),
-                'sandbox' => true
+                'sandbox' => $this->config->get('payment_payout_sandbox')
             );
 
             // Initialize Payout API Client PHP Library

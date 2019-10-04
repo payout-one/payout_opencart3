@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.2 RC - 2019-10-02
+* Release candidate
+* Sandbox configuration bug fix ([9b5c32a](https://github.com/payout-one/payout_opencart3/commit/9b5c32ac2ebe0bd5e3144d32e8b43bbcdece8239))
+
 ## 0.9.1 (beta) - 2019‑09-30
 * OpenCart payment module ([1ae1d55](https://github.com/payout-one/payout_opencart3/commit/1ae1d55885205e3380bd56b1696e90cb61091fb7))
 

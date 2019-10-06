@@ -28,14 +28,14 @@
  *
  * The Payout payment module for OpenCart 3
  *
- * @version    1.0.0
+ * @version    1.0.1
  * @copyright  2019 Payout, s.r.o.
  * @author     Neotrendy s. r. o.
  * @link       https://github.com/payout-one/payout_opencart3
  */
 class ControllerExtensionPaymentPayout extends Controller {
     protected $payout_config = array(
-        'version' => '1.0.0',
+        'version' => '1.0.1',
         'compatibility' => array('3.0.3.2'),
         'routes' => array(
             'checkout' => 'extension/payment/payout/checkout',

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.1 - 2019-10-07
+* Catalog/Model configuration bug fix
+
 ## 1.0.0 - 2019-10-04
 * Final version release ([97de084](https://github.com/payout-one/payout_opencart3/commit/97de084e941c53e766d97dbac170b316d34307f9))
 

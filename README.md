@@ -50,7 +50,7 @@ New order will be automatically changed to the status according to payment resul
 
 ## Version
 
-Stable version: 1.0.0
+Stable version: 1.0.1
 
 See the [CHANGELOG.md](CHANGELOG.md) file for list off all changes.
 

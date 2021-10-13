@@ -160,6 +160,9 @@ class ControllerExtensionPaymentPayout extends Controller {
             $this->load->model('checkout/order');
 
             $order_info = $this->model_checkout_order->getOrder($notification->external_id);
+            
+            $this->load->model('extension/payment/payout');
+            $this->model_extension_payment_payout->addPayoutOrderId($notification->external_id, $notification->data->id);
 
             if ($notification->data->status == 'succeeded' || $notification->data->status == 'successful') {
                 $order_status_id = $this->config->get('payment_payout_success_status_id');
@@ -167,6 +170,8 @@ class ControllerExtensionPaymentPayout extends Controller {
                 $order_status_id = $this->config->get('payment_payout_expired_status_id');
             } elseif ($notification->data->status == 'in_transit' || $notification->data->status == 'processing') {
                 $order_status_id = $this->config->get('payment_payout_processing_status_id');
+            } elseif ($notification->data->status == 'paid') {
+                $order_status_id = $this->config->get('payment_payout_refunded_status_id');                
             } elseif ($notification->data->status == 'failed') {
                 $order_status_id = $this->config->get('payment_payout_failed_status_id');
             } else {

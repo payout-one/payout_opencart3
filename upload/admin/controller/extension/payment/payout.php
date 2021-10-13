@@ -241,6 +241,15 @@ class ControllerExtensionPaymentPayout extends Controller {
         } else {
             $data['payment_payout_failed_status_id'] = $this->config->get('payment_payout_failed_status_id');
         }
+        
+        $data['entry_refunded_status'] = $this->language->get('entry_refunded_status');
+        $data['help_refunded_status'] = $this->language->get('help_refunded_status');
+
+        if (isset($this->request->post['payment_payout_refunded_status_id'])) {
+            $data['payment_payout_refunded_status_id'] = $this->request->post['payment_payout_refunded_status_id'];
+        } else {
+            $data['payment_payout_refunded_status_id'] = $this->config->get('payment_payout_refunded_status_id');
+        }
 
         $data['entry_notify'] = $this->language->get('entry_notify');
 
@@ -285,5 +294,91 @@ class ControllerExtensionPaymentPayout extends Controller {
         }
 
         return !$this->error;
+    }
+    
+    public function refund()
+    {
+        $this->log->write('Payout :: Start refund.');
+        if (isset($this->request->get['order_id'])) {
+            $order_id = $this->request->get['order_id'];
+        } else {
+            die('order_id not found');
+        }
+        $this->load->model('sale/order');
+
+        $order_info = $this->model_sale_order->getOrder($order_id);
+
+        if ($order_info) {
+
+            $totals = $this->model_sale_order->getOrderTotals($order_id);
+            $this->load->model('extension/payment/payout');
+            $this->load->model('sale/order');
+            $payoutId = $this->model_extension_payment_payout->getPayoutOrderId($order_id);
+
+            if ($payoutId) {
+                $refund_data = array(
+                    'amount' => (int)$order_info['total']*100,
+                    'currency' => $order_info['currency_code'],
+                    'checkout_id' => $order_id,
+                    'payout_id' => $payoutId,
+                    'iban' => "",
+                    'statement_descriptor' => "Description which will appear on customer's statement"
+                );
+
+                try {
+                    $response = $this->payout->createRefund($refund_data, $this->log);
+
+                    $this->log->write('Payout :: Refund Result = ' . var_export($response, true) . '; Order ID = ' . $order_id);
+
+                    if ($this->config->get('payment_payout_debug')) {
+                        $this->log->write('Payout :: REFUND: Order ID = ' . $order_id . '; Checkout status: ' . $response->status);
+                    }
+
+                    if ($response->status == 'pending') {
+                        $this->model_extension_payment_payout->updateOrderStatus($order_id, $this->config->get('payment_payout_processing_status_id'), '');
+                        
+                        $this->session->data['success'] = 'Success';
+
+                        $this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'], true));
+                    } else {
+                        $this->model_extension_payment_payout->updateOrderStatus($order_id, $this->config->get('payment_payout_processing_status_id'), '');
+                        
+                        $this->session->data['success'] = 'Status:'.$response->status;
+
+                        $this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'], true));
+                    }
+                } catch (Exception $e) {
+                    $result = $e->getMessage();
+
+                    $this->log->write('Payout :: WARNING: Refund failed! Result = ' . $result . '; Order ID = ' . $order_id);
+
+                    $this->language->load('extension/payment/payout');
+
+                    $this->session->data['success'] = $result;
+
+                    $this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'], true));
+                }
+            }
+        } else {
+            die('order not found');
+        }
+
+    }
+    
+    
+    public function install() {
+        if ($this->user->hasPermission('modify', 'marketplace/extension')) {
+            $this->load->model('extension/payment/payout');
+
+            $this->model_extension_payment_payout->install();
+        }
+    }
+
+    public function uninstall() {
+        if ($this->user->hasPermission('modify', 'marketplace/extension')) {
+            $this->load->model('extension/payment/payout');
+
+            $this->model_extension_payment_payout->uninstall();
+        }
     }
 }

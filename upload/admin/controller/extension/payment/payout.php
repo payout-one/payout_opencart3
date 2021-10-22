@@ -322,7 +322,7 @@ class ControllerExtensionPaymentPayout extends Controller {
                     'checkout_id' => $order_id,
                     'payout_id' => $payoutId,
                     'iban' => "",
-                    'statement_descriptor' => "Description which will appear on customer's statement"
+                    'statement_descriptor' => ""
                 );
 
                 try {

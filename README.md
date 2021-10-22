@@ -32,7 +32,7 @@ The [Payout API Client PHP Library]((https://github.com/payout-one/payout_php)) 
 
 1. Download `.ocmod.zip` installation file from [GitHub Releases](https://github.com/payout-one/payout_opencart2/releases).
 2. Unzip downloaded file.
-3. Use any FTP client to upload files form `upload` directory to Your Store `root` on your web-server. 
+3. Use any FTP client to upload files form `upload` directory to Your Store `root` on your web-server.
 
 ### Configuration
 
@@ -50,7 +50,7 @@ New order will be automatically changed to the status according to payment resul
 
 ## Version
 
-Stable version: 1.0.1
+Stable version: 1.0.2
 
 See the [CHANGELOG.md](CHANGELOG.md) file for list off all changes.
 

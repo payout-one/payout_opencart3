@@ -28,14 +28,15 @@
  *
  * The Payout payment module for OpenCart 3
  *
- * @version    1.0.1
+ * @version    1.0.2
  * @copyright  2019 Payout, s.r.o.
  * @author     Neotrendy s. r. o.
  * @link       https://github.com/payout-one/payout_opencart3
  */
-class ControllerExtensionPaymentPayout extends Controller {
+class ControllerExtensionPaymentPayout extends Controller
+{
     protected $payout_config = array(
-        'version' => '1.0.1',
+        'version' => '1.0.2',
         'compatibility' => array('3.0.3.2'),
         'routes' => array(
             'checkout' => 'extension/payment/payout/checkout',
@@ -45,7 +46,8 @@ class ControllerExtensionPaymentPayout extends Controller {
 
     private $error = array();
 
-    public function index() {
+    public function index()
+    {
         $this->load->language('extension/payment/payout');
 
         $this->document->setTitle($this->language->get('heading_title'));
@@ -241,7 +243,7 @@ class ControllerExtensionPaymentPayout extends Controller {
         } else {
             $data['payment_payout_failed_status_id'] = $this->config->get('payment_payout_failed_status_id');
         }
-        
+
         $data['entry_refunded_status'] = $this->language->get('entry_refunded_status');
         $data['help_refunded_status'] = $this->language->get('help_refunded_status');
 
@@ -280,7 +282,8 @@ class ControllerExtensionPaymentPayout extends Controller {
         $this->response->setOutput($this->load->view('extension/payment/payout', $data));
     }
 
-    private function validate() {
+    private function validate()
+    {
         if (!$this->user->hasPermission('modify', 'extension/payment/payout')) {
             $this->error['warning'] = $this->language->get('error_permission');
         }
@@ -295,7 +298,7 @@ class ControllerExtensionPaymentPayout extends Controller {
 
         return !$this->error;
     }
-    
+
     public function refund()
     {
         $this->log->write('Payout :: Start refund.');
@@ -317,7 +320,7 @@ class ControllerExtensionPaymentPayout extends Controller {
 
             if ($payoutId) {
                 $refund_data = array(
-                    'amount' => (int)$order_info['total']*100,
+                    'amount' => (int)$order_info['total'] * 100,
                     'currency' => $order_info['currency_code'],
                     'checkout_id' => $order_id,
                     'payout_id' => $payoutId,
@@ -336,14 +339,14 @@ class ControllerExtensionPaymentPayout extends Controller {
 
                     if ($response->status == 'pending') {
                         $this->model_extension_payment_payout->updateOrderStatus($order_id, $this->config->get('payment_payout_processing_status_id'), '');
-                        
+
                         $this->session->data['success'] = 'Success';
 
                         $this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'], true));
                     } else {
                         $this->model_extension_payment_payout->updateOrderStatus($order_id, $this->config->get('payment_payout_processing_status_id'), '');
-                        
-                        $this->session->data['success'] = 'Status:'.$response->status;
+
+                        $this->session->data['success'] = 'Status:' . $response->status;
 
                         $this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'], true));
                     }
@@ -362,11 +365,11 @@ class ControllerExtensionPaymentPayout extends Controller {
         } else {
             die('order not found');
         }
-
     }
-    
-    
-    public function install() {
+
+
+    public function install()
+    {
         if ($this->user->hasPermission('modify', 'marketplace/extension')) {
             $this->load->model('extension/payment/payout');
 
@@ -374,7 +377,8 @@ class ControllerExtensionPaymentPayout extends Controller {
         }
     }
 
-    public function uninstall() {
+    public function uninstall()
+    {
         if ($this->user->hasPermission('modify', 'marketplace/extension')) {
             $this->load->model('extension/payment/payout');
 

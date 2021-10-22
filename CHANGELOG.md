@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2021-10-22
+* Added refund feature
+* Send addresses and products details to checkout api
+
 ## 1.0.1 - 2019-10-07
 * Catalog/Model configuration bug fix
 

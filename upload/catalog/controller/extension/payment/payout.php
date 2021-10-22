@@ -99,8 +99,36 @@ class ControllerExtensionPaymentPayout extends Controller {
 
         $order_id = $this->session->data['order_id'];
         $order_info = $this->model_checkout_order->getOrder($order_id);
+		
+		
+		$this->load->model('account/order');
+ 
+		$order_info_cart = false;
+		$order_info_cart = $this->model_account_order->getOrderProducts($this->session->data['order_id']);
 
         if ($order_info && $order_info['order_status_id'] == 0)  {
+			$billing_data = array(
+			'name' => $order_info['payment_firstname'].' '.$order_info['payment_lastname'],
+			'address_line_1' => $order_info['payment_address_1'],
+			'address_line_2' => $order_info['payment_address_2'],
+			'city'      => $order_info['payment_city'],
+			'postal_code'  => $order_info['payment_postcode'],
+			'country_code'   => $order_info['payment_iso_code_2']
+			);
+			
+			$shipping_data = array(
+			'name' => $order_info['shipping_firstname'].' '.$order_info['shipping_lastname'],
+			'address_line_1' => $order_info['shipping_address_1'],
+			'address_line_2' => $order_info['shipping_address_2'],
+			'city'      => $order_info['shipping_city'],
+			'postal_code'  => $order_info['shipping_postcode'],
+			'country_code'   => $order_info['shipping_iso_code_2']
+			);
+			
+			$products_data = array();
+			foreach ($order_info_cart as &$value) {array_push($products_data, ['name' => $value['name'], 'quantity' => $value['quantity'], "unit_price" => $value['price']]);}
+			unset($value);
+			
             $checkout_data = array(
                 'amount' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false),
                 'currency' => $order_info['currency_code'],
@@ -110,7 +138,13 @@ class ControllerExtensionPaymentPayout extends Controller {
                     'email' =>  $order_info['email']
                 ],
                 'external_id' => $order_id,
-                'redirect_url' => $this->url->link('checkout/success')
+                'redirect_url' => $this->url->link('checkout/success'),
+				//add products array
+				'products' =>  $products_data,
+				//add billinng address array
+				'billing_address' =>$billing_data,
+				//add shipping address array
+				'shipping_address' =>$shipping_data
             );
 
             try {
@@ -160,6 +194,9 @@ class ControllerExtensionPaymentPayout extends Controller {
             $this->load->model('checkout/order');
 
             $order_info = $this->model_checkout_order->getOrder($notification->external_id);
+            
+            $this->load->model('extension/payment/payout');
+            $this->model_extension_payment_payout->addPayoutOrderId($notification->external_id, $notification->data->id);
 
             if ($notification->data->status == 'succeeded' || $notification->data->status == 'successful') {
                 $order_status_id = $this->config->get('payment_payout_success_status_id');
@@ -167,6 +204,8 @@ class ControllerExtensionPaymentPayout extends Controller {
                 $order_status_id = $this->config->get('payment_payout_expired_status_id');
             } elseif ($notification->data->status == 'in_transit' || $notification->data->status == 'processing') {
                 $order_status_id = $this->config->get('payment_payout_processing_status_id');
+            } elseif ($notification->data->status == 'paid') {
+                $order_status_id = $this->config->get('payment_payout_refunded_status_id');                
             } elseif ($notification->data->status == 'failed') {
                 $order_status_id = $this->config->get('payment_payout_failed_status_id');
             } else {

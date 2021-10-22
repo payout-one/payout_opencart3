@@ -63,4 +63,20 @@ class ModelExtensionPaymentPayout extends Model {
 
         return $method_data;
     }
+        
+    public function getPayoutOrderId($orderId) {
+
+        $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_payout WHERE id = '" . (int)$orderId . "'");
+
+        if ($query->rows[0]) return $query->rows[0]['payout_id'];
+
+        return null;
+    }
+
+    public function addPayoutOrderId($orderId, $payoutId) {
+        $sql = "INSERT INTO `" . DB_PREFIX . "order_payout` (id, payout_id) VALUES ('". $orderId ."','". $payoutId ."')";
+
+        $this->db->query($sql);
+    }
+
 }
